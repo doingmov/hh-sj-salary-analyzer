@@ -1,2 +1,2 @@
-requests
-terminaltables
+requests>=2,<3
+terminaltables>=3,<4 
