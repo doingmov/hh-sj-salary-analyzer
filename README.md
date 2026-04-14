@@ -19,6 +19,7 @@
 - Python 3
 - requests
 - terminaltables
+- python-dotenv
 - HeadHunter API
 - SuperJob API
 
@@ -36,22 +37,21 @@ pip install -r requirements.txt
 
 - Зарегистрируйте приложение на [SuperJob](https://api.superjob.ru) и получите `Secret Key`
 
-#### 💡 Установка ключа (через переменную окружения)
+#### 💡 Установка ключа
 
-1. Windows (PowerShell):
-```bash
-setx SUPERJOB_API_KEY "ваш_ключ"
-```
+После получения `Secret key`
+- Создайте файл .env в корне проекта и добавьте туда свой ключ:
 
-2. macOS / Linux: 
 ```bash
-export SUPERJOB_API_KEY="ваш_ключ"
+SUPERJOB_API_KEY="ваш_secret_key"
 ```
 
 #### В коде ключ используется так:
 
 ```python
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
 ```
