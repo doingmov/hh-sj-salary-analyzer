@@ -3,7 +3,7 @@ import os
 from terminaltables import AsciiTable
 
 
-API_KEY = os.getenv("SUPERJOB_API_KEY")
+SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
 
 
 def predict_salary(salary_from, salary_to):
