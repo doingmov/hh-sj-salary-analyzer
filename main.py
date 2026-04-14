@@ -2,7 +2,6 @@ import requests
 import os
 from terminaltables import AsciiTable
 
-
 SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
 
 
