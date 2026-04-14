@@ -1,5 +1,5 @@
 import requests
-import
+import os
 from terminaltables import AsciiTable
 
 
