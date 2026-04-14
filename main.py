@@ -1,23 +1,37 @@
 import requests
 import os
 from terminaltables import AsciiTable
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
 
 
+HH_URL = "https://api.hh.ru/vacancies"
+HH_AREA_MOSCOW = 1
+HH_PERIOD_DAYS = 30
+
+
+SJ_URL = "https://api.superjob.ru/2.0/vacancies/"
+SJ_TOWN_MOSCOW = 4
+SJ_CATALOGUE_PROGRAMMING = 48
+SJ_PAGE_SIZE = 100
+
+
 def predict_salary(salary_from, salary_to):
-    if salary_from == 0:
+    if not salary_from:
         salary_from = None
-    if salary_to == 0:
+    if not salary_to:
         salary_to = None
 
-    if salary_from is not None and salary_to is not None:
+    if salary_from and salary_to:
         return (salary_from + salary_to) / 2
 
-    if salary_from is not None:
+    if salary_from:
         return salary_from * 1.2
 
-    if salary_to is not None:
+    if salary_to:
         return salary_to * 0.8
 
     return None
@@ -46,22 +60,35 @@ def predict_rub_salary_sj(vacancy):
 
 
 def get_hh_stats(language):
-    url = "https://api.hh.ru/vacancies"
+    url = HH_URL
 
-    params = {
-        "text": f"Программист {language}",
-        "area": 1,
-        "period": 30
-    }
+    page = 0
+    pages = 1
 
-    response = requests.get(url, params=params)
-    data = response.json()
+    vacancies = []
+
+    while page < pages:
+        params = {
+            "text": f"Программист {language}",
+            "area": HH_AREA_MOSCOW,
+            "period": HH_PERIOD_DAYS,
+            "page": page,
+            "per_page": 100
+        }
+
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        vacancies.extend(data.get("items", []))
+
+        pages = data["pages"]
+        page += 1
 
     salaries = []
 
-    for vac in data["items"]:
+    for vac in vacancies:
         salary = predict_rub_salary_hh(vac)
-        if salary is not None:
+        if salary:
             salaries.append(salary)
 
     processed = len(salaries)
@@ -74,23 +101,26 @@ def get_hh_stats(language):
 
 
 def get_sj_stats(language, api_key):
-    url = "https://api.superjob.ru/2.0/vacancies/"
     headers = {"X-Api-App-Id": api_key}
 
     page = 0
     vacancies = []
 
+    total_found = 0
+
     while True:
         params = {
-            "town": 4,
-            "catalogues": 48,
+            "town": SJ_TOWN_MOSCOW,
+            "catalogues": SJ_CATALOGUE_PROGRAMMING,
             "keyword": f"Программист {language}",
-            "count": 100,
+            "count": SJ_PAGE_SIZE,
             "page": page
         }
 
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(SJ_URL, headers=headers, params=params)
         data = response.json()
+
+        total_found = data.get("total", 0)
 
         objects = data.get("objects", [])
 
@@ -99,7 +129,7 @@ def get_sj_stats(language, api_key):
 
         vacancies.extend(objects)
 
-        if len(objects) < 100:
+        if len(objects) < SJ_PAGE_SIZE:
             break
 
         page += 1
@@ -108,13 +138,13 @@ def get_sj_stats(language, api_key):
 
     for vac in vacancies:
         salary = predict_rub_salary_sj(vac)
-        if salary is not None:
+        if salary:
             salaries.append(salary)
 
     processed = len(salaries)
 
     return {
-        "vacancies_found": len(vacancies),
+        "vacancies_found": total_found,
         "vacancies_processed": processed,
         "average_salary": int(sum(salaries) / processed) if processed else 0
     }
