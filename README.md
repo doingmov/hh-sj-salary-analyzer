@@ -53,7 +53,7 @@ export SUPERJOB_API_KEY="ваш_ключ"
 ```python
 import os
 
-API_KEY = os.getiron("SUPERJOB_API_KEY")
+API_KEY = os.getenv("SUPERJOB_API_KEY")
 ```
 
 ### 3. Запустить проект
