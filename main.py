@@ -147,7 +147,7 @@ def main():
 
     for lang in languages:
         hh_stats[lang] = get_hh_stats(lang)
-        sj_stats[lang] = get_sj_stats(lang, API_KEY)
+        sj_stats[lang] = get_sj_stats(lang, SUPERJOB_API_KEY)
 
     print_table("HeadHunter Moscow", hh_stats)
     print_table("SuperJob Moscow", sj_stats)
