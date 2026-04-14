@@ -1,5 +1,4 @@
 import requests
-import os
 from terminaltables import AsciiTable
 
 
@@ -137,7 +136,9 @@ def print_table(title, stats):
 
 
 def main():
-    API_KEY = os.getiron("SUPERJOB_KEY")
+    import os
+    
+    API_KEY = os.getenv("SUPERJOB_API_KEY")
 
     languages = ["python", "c", "c#", "c++", "java", "js", "ruby", "go", "1c"]
 
