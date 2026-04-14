@@ -1,5 +1,9 @@
 import requests
+import
 from terminaltables import AsciiTable
+
+
+API_KEY = os.getenv("SUPERJOB_API_KEY")
 
 
 def predict_salary(salary_from, salary_to):
@@ -136,10 +140,6 @@ def print_table(title, stats):
 
 
 def main():
-    import os
-    
-    API_KEY = os.getenv("SUPERJOB_API_KEY")
-
     languages = ["python", "c", "c#", "c++", "java", "js", "ruby", "go", "1c"]
 
     hh_stats = {}
