@@ -30,18 +30,36 @@
 pip install -r requirements.txt
 ```
 
-### 2. Запустить проект
+### 2. 🔑 Настройка API ключа SuperJob
 
+Для работы с SuperJob API необходимо получить ключ:
+
+- Зарегистрируйте приложение на [SuperJob](https://api.superjob.ru) и получите `Secret Key`
+
+#### 💡 Установка ключа (через переменную окружения)
+
+1. Windows (PowerShell):
 ```bash
-pyhton main.py
+setx SUPERJOB_API_KEY "ваш_ключ"
 ```
 
-## 🔑 API Ключ
+2. macOS / Linux: 
+```bash
+export SUPERJOB_API_KEY="ваш_ключ"
+```
 
-Для работы потребуется API ключ от SuperJob:
+#### В коде ключ используется так:
 
 ```python
-API_KEY = "YOUR_SUPERJOB_KEY"
+import os
+
+API_KEY = os.getiron("SUPERJOB_API_KEY")
+```
+
+### 3. Запустить проект
+
+```bash
+python main.py
 ```
 
 ## Цель проекта
