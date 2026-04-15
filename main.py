@@ -3,10 +3,6 @@ import os
 from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
-load_dotenv()
-
-SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
-
 
 HH_URL = "https://api.hh.ru/vacancies"
 HH_AREA_MOSCOW = 1
@@ -169,6 +165,10 @@ def print_table(title, stats):
 
 
 def main():
+    load_dotenv()
+
+    SUPERJOB_API_KEY = os.getenv("SUPERJOB_API_KEY")
+
     languages = ["python", "c", "c#", "c++", "java", "js", "ruby", "go", "1c"]
 
     hh_stats = {}
